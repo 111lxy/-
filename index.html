@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>桂工赛智通 · 面向大学生竞赛服务的智能体</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="backdrop" id="sidebarBackdrop"></div>
+
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 4v4M9 12v1M15 12v1M8 20h8"/></svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">桂工赛智通</div>
+          <div class="brand-sub">大学生竞赛服务智能体</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-panel="chat">
+          <svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z"/></svg>
+          <span>智能对话</span>
+        </button>
+        <button class="nav-item" data-panel="kb">
+          <svg viewBox="0 0 24 24"><path d="M4 4a2 2 0 0 1 2-2h13v18H6a2 2 0 0 0-2 2Z"/><path d="M4 20a2 2 0 0 1 2-2h13"/></svg>
+          <span>知识库</span>
+        </button>
+        <button class="nav-item" data-panel="profile">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          <span>我的画像</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-stats">
+        <div class="stat-row"><span>已收录赛事</span><strong id="sideCompCount">2</strong></div>
+        <div class="stat-row"><span>最近截止</span><strong>09-07</strong></div>
+      </div>
+
+      <div class="sidebar-foot">
+        <button class="add-comp-btn" id="addCompBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          <span>添加赛事</span>
+        </button>
+        <div class="sidebar-note">知识库越长越聪明<br>支持持续扩充</div>
+      </div>
+    </aside>
+
+    <!-- 主区域 -->
+    <main class="main">
+      <!-- 对话面板 -->
+      <section class="panel active" id="panel-chat">
+        <header class="chat-head">
+          <button class="menu-btn" id="menuBtn">
+            <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+          <div class="chat-head-title">
+            <div class="chat-head-name">赛智通助手</div>
+            <div class="chat-head-status" id="aiStatus"><span class="dot"></span>知识库已就绪 · 规则模式</div>
+          </div>
+          <button class="ghost-btn" id="settingsBtn" title="AI 大脑设置">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.88 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.88.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55h.01a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.88v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
+          </button>
+          <button class="ghost-btn" data-panel="profile" data-nav>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          </button>
+        </header>
+
+        <div class="chat-log" id="chatLog"></div>
+
+        <div class="suggestions" id="suggestions"></div>
+
+        <div class="composer">
+          <div class="composer-box">
+            <textarea id="input" rows="1" placeholder="问比赛、选赛道、查资格、列材料…"></textarea>
+            <button class="send-btn" id="sendBtn" title="发送">
+              <svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            </button>
+          </div>
+          <div class="composer-hint">Enter 发送 · Shift+Enter 换行 · 智能体由本地知识库驱动</div>
+        </div>
+      </section>
+
+      <!-- 知识库面板 -->
+      <section class="panel" id="panel-kb">
+        <header class="sub-head">
+          <div>
+            <div class="sub-title">知识库</div>
+            <div class="sub-desc" id="kbCount">2 场赛事 · 12 个赛道/类别</div>
+          </div>
+          <button class="add-comp-btn inline" id="addCompBtn2">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            <span>添加赛事</span>
+          </button>
+        </header>
+        <div class="kb-layout">
+          <div class="kb-list" id="kbList"></div>
+          <div class="kb-empty-hint" id="kbEmptyHint">
+            <div class="kb-empty-ico">📚</div>
+            <div class="kb-empty-title">点左侧选择一场赛事查看详情</div>
+            <div class="kb-empty-desc">你也可以点右上角「添加赛事」，把新的通知文件信息录入知识库。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 画像面板 -->
+      <section class="panel" id="panel-profile">
+        <header class="sub-head">
+          <div>
+            <div class="sub-title">我的画像</div>
+            <div class="sub-desc">用于更精准的赛道匹配，填得越全推荐越准</div>
+          </div>
+        </header>
+        <div class="profile-form">
+          <div class="field">
+            <label>年级</label>
+            <select id="pf-grade">
+              <option value="">请选择</option>
+              <option>大一</option><option>大二</option><option>大三</option><option>大四</option>
+              <option>研究生</option><option>博士生</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>专业</label>
+            <input id="pf-major" type="text" placeholder="如：计算机科学与技术" />
+          </div>
+          <div class="field">
+            <label>兴趣方向（可多选）</label>
+            <div class="int-chips">
+              <button class="int-chip" data-v="AI/编程">AI/编程</button>
+              <button class="int-chip" data-v="视频剪辑">视频剪辑</button>
+              <button class="int-chip" data-v="摄影/设计">摄影/设计</button>
+              <button class="int-chip" data-v="写作/文案">写作/文案</button>
+              <button class="int-chip" data-v="音频/音乐">音频/音乐</button>
+              <button class="int-chip" data-v="新媒体/排版">新媒体/排版</button>
+              <button class="int-chip" data-v="产品策划">产品策划</button>
+              <button class="int-chip" data-v="PPT/汇报">PPT/汇报</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>技能/工具</label>
+            <input id="pf-skills" type="text" placeholder="如：Python、剪映、PS、大模型平台…" />
+          </div>
+          <div class="field">
+            <label>预计团队成员数</label>
+            <input id="pf-team" type="number" min="1" max="8" value="1" />
+          </div>
+          <button class="primary-btn" id="pf-save">保存画像并推荐赛道</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 知识库详情抽屉 -->
+  <div class="drawer" id="kbDetailPanel">
+    <div class="drawer-card">
+      <button class="detail-close" title="关闭">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div id="kbDetail"></div>
+    </div>
+  </div>
+
+  <!-- 添加赛事抽屉 -->
+  <div class="drawer" id="addCompPanel">
+    <div class="drawer-card">
+      <button class="detail-close add-close" title="关闭">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="sub-title" style="margin-bottom:16px">添加赛事到知识库</div>
+      <div class="profile-form">
+        <div class="field"><label>赛事名称 *</label><input id="ac-name" type="text" placeholder="如：2026年大学生创新创业大赛" /></div>
+        <div class="field"><label>面向对象</label><input id="ac-audience" type="text" placeholder="如：全日制在校学生" /></div>
+        <div class="field"><label>主办单位</label><input id="ac-organizer" type="text" placeholder="如：教务处" /></div>
+        <div class="field"><label>截止日期</label><input id="ac-deadline" type="date" /></div>
+        <div class="field"><label>报送邮箱 / 入口</label><input id="ac-submit" type="text" placeholder="如：xx@glut.edu.cn" /></div>
+        <button class="primary-btn" id="addCompSubmit">保存到知识库</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 大脑设置抽屉 -->
+  <div class="drawer" id="settingsPanel">
+    <div class="drawer-card">
+      <button class="detail-close add-close" title="关闭">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="sub-title" style="margin-bottom:6px">AI 大脑设置</div>
+      <div class="sub-desc" style="margin-bottom:16px">接入大模型后，作品创意、方案、开放问答将由真实 AI 生成</div>
+      <div class="profile-form">
+        <div class="field">
+          <label>服务商</label>
+          <select id="llm-provider">
+            <option value="openrouter">OpenRouter（推荐，免备案、支持浏览器直连）</option>
+            <option value="deepseek">DeepSeek（兼容 OpenAI 格式）</option>
+            <option value="zhipu">智谱 GLM（兼容 OpenAI 格式）</option>
+            <option value="moonshot">Moonshot Kimi（兼容 OpenAI 格式）</option>
+            <option value="custom">自定义（OpenAI 兼容接口）</option>
+          </select>
+        </div>
+        <div class="field"><label>接口地址 Base URL</label><input id="llm-base" type="text" placeholder="https://openrouter.ai/api/v1" /></div>
+        <div class="field"><label>API Key</label><input id="llm-key" type="password" placeholder="sk-..." /></div>
+        <div class="field"><label>模型名</label><input id="llm-model" type="text" placeholder="deepseek/deepseek-chat-v3" /></div>
+        <button class="primary-btn" id="llm-test">保存并测试连接</button>
+        <div class="md dim" style="font-size:12px;line-height:1.7">
+          API Key 只保存在本机浏览器 localStorage，不会上传到别处。<br>
+          免费方案：OpenRouter 注册有免费额度；DeepSeek 价格很低；智谱 GLM 有免费模型。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="kb.js"></script>
+  <script src="kb_whitelist.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
